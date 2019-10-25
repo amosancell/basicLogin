@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="stylesheet.css">
+    </head>
+
+    <body>
+
+        <h1>Change Your Password Here</h1>
+
+        <form method="POST" action="/changePass">
+            Old Password: <input type="text" autocomplete="off" name="oldPass"><br>
+            New Password: <input type="password" name="newPass"><br>
+            Confirm New Password: <input type="password" name="confPass"><br>
+            <input type="submit">
+        </form>
+        
+        <% if (typeof mssg !== 'undefined') { %>
+            <p><span <% if(mssg.success) { %> id="successMssgDisp" <% } else { %> id="errorMssgDisp" <% } %>><%= mssg.message %></span></p>
+        <% }; %>
+
+        <a href="home" style="text-decoration: none">Return Home</a>
+
+    </body>
+</html>

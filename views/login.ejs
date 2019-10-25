@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="stylesheet.css">
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+        <!--<script>
+            /*$("#loginInput").ajax({
+                url: "http://localhost:3000/post",
+                type: "POST",
+                data: {userName: "amos", password: "hi"},
+                success: display
+            });*/
+            $(document).ready(function() {
+                $("#loginInput").click(function() {
+                    // send data to post
+                    $.ajax({
+                        url: "http://localhost:3000/post",
+                        type: "POST",
+                        data: {userName: $("#userNameInput").val(), password: $("#passwordInput").val()},
+                        success: display
+                    });
+
+                });
+            });
+
+            function display(data, status) {
+                console.log(data.success);
+                if(data.success) {
+                    // clear inputs
+                    //$("#userNameInput").val('');
+                    //$("#passwordInput").val('');
+                    //document.location.href = "file:///Users/h205p5/Documents/basicLogin/index.html";
+                    document.getElementById("loginMssg").innerHTML = "Login Successful!<br>Welcome back " + data.userName;
+                }
+                else {
+                    document.getElementById("loginMssg").innerHTML = "Login failed, try again!";
+                }
+                $("#userNameInput").val('');
+                $("#passwordInput").val('');
+                console.log("status: " + status);
+            }
+        </script>-->
+    </head>
+
+    <body>
+
+        <!--Username: <input type="text" name="userName" id="userNameInput" autocomplete="off"><br>
+        Password: <input type="password" name="password" id="passwordInput" autocomplete="off"><br>
+        <button type="button" id="loginInput">Submit</button>-->
+
+        <form action="/loginPost" method="POST">
+            Username: <input type="text" name="userName" autocomplete="off"><br>
+            Password: <input type="password" name="password" autocomplete="off"><br>
+            <input type="submit">
+        </form>
+
+        <a href="/createUser">Register</a>
+
+        <% if (errorMssg.message !== '') {  %>
+            <p style="padding: 3px 3px 3px 8px;"><span id="errorMssgDisp"><%= errorMssg.message %></span></p>
+        <% }; %>
+
+        <div>
+            <p id="loginMssg">hello world ejs</p>
+        </div>
+
+    </body>
+
+</html>

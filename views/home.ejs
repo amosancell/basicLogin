@@ -1,0 +1,43 @@
+<html>
+    
+    <head>
+        <link type="text/css" rel="stylesheet" href="stylesheet.css">
+    </head>
+
+    <body>
+
+        <h1 id="homegreeting">Welcome back <%= user.userName %></h1>
+
+        <form method="POST" action="/infoPost">
+            Name: <input type="text" autocomplete="off" name="name"><br>
+            Age: <input type="text" autocomplete="off" name="age"><br>
+            <input type="submit">
+        </form>
+        
+        <p>This is a rock</p>
+        <img src="images/rock.jpg" alt="picture of rocks" width=100 height=70>
+        
+        <h1> Account Info: </h1><br>
+        
+        <h4>Username: <%= user.userName %></h4>
+        <h4>Password: <%= user.password %></h4>
+
+        <% if('name' in user) { %>
+            <h4>Name: <%= user.name %></h4>
+        <% } %>
+
+        <% if('age' in user) { %>
+            <h4>Age: <%= user.age %></h4>
+        <% } %>
+
+        <% /* %>
+        <% for(let key in user) { %>
+            <h4><%= key %>: <%= user[key] %></h4><br>
+        <% }; %>
+        <% */ %>
+        
+        <a href="changePassLink">Change Password</a>
+
+    </body>
+
+</html>

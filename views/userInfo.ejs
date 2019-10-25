@@ -1,0 +1,38 @@
+<html>
+
+    <head>
+
+    </head>
+
+    <body>
+        <form method="POST" action="/getUserInfo">
+            <input type="submit">
+        </form>
+    </body>
+
+    <p>length: </p><%= userInfo.userList.length %><br>
+    <p>first user: </p><%= userInfo.userList[0] %><br>
+    <p>keys 1st user: </p><%= Object.keys(userInfo.userList[0]) %>
+
+    <% /* %>
+
+    <% if (userInfo.userList.length != 0) { %>
+        <table>
+            <tr>
+                <% for(let key in userInfo.userList[0]) { %>
+                    <th><%= key %></th>
+                <% } %>
+            </tr>
+            <% for(let i=0; i < userInfo.userList.length; i++) { %>
+                <tr>
+                    <% for(let key in userInfo.userList[i]) { %>
+                        <td><%=userInfo[key]%></td>
+                    <% } %>
+                </tr>
+            <% } %>
+        </table>
+    <% } %>
+
+    <% */ %>
+
+</html>

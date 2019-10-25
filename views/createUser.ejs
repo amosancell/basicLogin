@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="stylesheet.css">
+    </head>
+
+    <body>
+
+        <form method="POST" action="/makeUser">
+            Username: <input type="text" autocomplete="off" name="userName"><br>
+            Password: <input type="password" autocomplete="off" name="password"><br>
+            <input type="submit">
+        </form>
+
+        <% if(data.message !== "") { %>
+            <p><span <% if(data.success) { %> id="successMssgDisp" <% } else { %> id="errorMssgDisp" <% } %>><%= data.message %></span></p>
+        <% }; %>
+        <a href="/login">Login Here</a>
+
+    </body>
+</html>
