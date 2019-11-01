@@ -23,3 +23,37 @@
     border-width: 1px;
     border-radius: 10px;
 }
+
+/* user info table css */
+.userInfoTable {
+    border-collapse: collapse;
+}
+
+.userInfoRow:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.userInfoVal {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+
+/* top nav bar css */
+.topnav {
+    background-color: rgb(2,66,16);
+    margin-bottom: 16px;
+}
+
+.topnav a {
+    color: rgb(255,255,255);
+    /*padding-left: 14px;
+    padding-right: 14px;*/
+    padding: 14px;
+    text-decoration: none;
+}
+
+.topnav a:hover {
+    background-color: rgb(123, 216, 146);
+}

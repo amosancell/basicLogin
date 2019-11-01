@@ -6,6 +6,13 @@
 
     <body>
 
+        <div class="topnav">
+            <a href="home">Home</a>
+            <a href="changePassLink">Change Password</a>
+            <a href="createUser">Create Usre</a>
+            <a href="userInfo">User Info</a>
+        </div>
+
         <h1 id="homegreeting">Welcome back <%= user.userName %></h1>
 
         <form method="POST" action="/infoPost">
@@ -36,7 +43,6 @@
         <% }; %>
         <% */ %>
         
-        <a href="changePassLink">Change Password</a>
 
     </body>
 

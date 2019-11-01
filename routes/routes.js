@@ -3,7 +3,8 @@ module.exports = function(app, cors, userName, password, userInfo) {
     var currentUser;
 
     //import the User object
-    var User = require('../Models/user.js');
+    var User = require('../Models/user.js').userSchema;
+    var Apple = require('../Models/user.js').appleSchema;
 
     app.get('/home', cors(), function(req, res) {
         if(!currentUser) {
@@ -206,17 +207,62 @@ module.exports = function(app, cors, userName, password, userInfo) {
 
     app.get('/userInfo', cors(), function(req, res) {
         res.render('userInfo.ejs', {userInfo: {userList: []}});
+        //res.render('userInfo.ejs', {userInfo: {}});
     });
     
     app.post('/getUserInfo', cors(), function(req, res) {
         console.log("start /getUserInfo");
-        User.find({}, function(error, users) {
+        //console.log(req,'\n\n');
+        //console.log(req.body.uComp, req.body.uSearch);
+        var query = {};
+        if(req.body.uComp && req.body.uSearch) {
+            if(req.body.uComp == "=") {
+                query.userName = req.body.uSearch;
+            }
+            else if(req.body.uComp == "contains") {
+                query.userName = new RegExp(req.body.uSearch);
+            }
+        }
+        if(req.body.pComp && req.body.pSearch) {
+            if(req.body.pComp == "=") {
+                query.password = req.body.pSearch;
+            }
+            else if(req.body.pComp == "contains") {
+                query.password = new RegExp(req.body.pSearch);
+            }
+        }
+        if(req.body.nameComp && req.body.nameSearch) {
+            if(req.body.nameComp == "=") {
+                query.name = req.body.nameSearch;
+            }
+            else if(req.body.nameComp == "contains") {
+                query.name = new RegExp(req.body.nameSearch);
+            }
+        }
+        if(req.body.ageComp && req.body.ageSearch) {
+            if(req.body.ageComp == "=") {
+                query.age = req.body.ageSearch;
+            }
+            else if(req.body.ageComp == "<") {
+                query.age = {$lt: req.body.ageSearch};
+            }
+            else if(req.body.ageComp == ">") {
+                query.age = {$gt: req.body.ageSearch};
+            }
+            else if(req.body.ageComp == "<=") {
+                query.age = {$lte: req.body.ageSearch};
+            }
+            else if(req.body.ageComp == ">=") {
+                query.age = {$gte: req.body.ageSearch};
+            }
+        }
+        User.find(query, function(error, users) {
             if(error) {
                 console.log("an error has occured");
                 res.redirect("/userInfo");
             }
             else {
-                console.log('find results', typeof users, users);
+                console.log('found results', users);
                 res.render('userInfo.ejs', {userInfo: {userList: users}});
             }
         });

@@ -1,38 +1,88 @@
 <html>
 
     <head>
-
+        <link type="text/css" rel="stylesheet" href="stylesheet.css">
     </head>
 
     <body>
+
+        <div class="topnav">
+            <a href="home">Home</a>
+            <a href="changePassLink">Change Password</a>
+            <a href="createUser">Create Usre</a>
+            <a href="userInfo">User Info</a>
+        </div>
+
         <form method="POST" action="/getUserInfo">
-            <input type="submit">
+            Select usernames 
+                <select name="uComp">
+                    <option value="=">Equal to</option>
+                    <option value="contains">containing</option>
+                </select>
+                <input type="text" autocomplete="off" name="uSearch">
+                <br>
+
+                Select passwords 
+                <select name="pComp">
+                    <option value="=">Equal to</option>
+                    <option value="contains">containing</option>
+                </select>
+                <input type="text" autocomplete="off" name="pSearch">
+                <br>
+
+                Select names 
+                <select name="nameComp">
+                    <option value="=">Equal to</option>
+                    <option value="contains">containing</option>
+                </select>
+                <input type="text" autocomplete="off" name="nameSearch">
+                <br>
+
+                Select ages 
+                <select name="ageComp">
+                    <option value="=">Equal to</option>
+                    <option value="<">Less than</option>
+                    <option value=">">Greater than</option>
+                    <option value="<=">Less than or equal</option>
+                    <option value=">=">Greater than or equal</option>
+                </select>
+                <input type="text" autocomplete="off" name="ageSearch">
+                <br>
+            <br><input type="submit">
         </form>
     </body>
 
+    <% /* %>
     <p>length: </p><%= userInfo.userList.length %><br>
     <p>first user: </p><%= userInfo.userList[0] %><br>
+    <p>first user userName</p><%= userInfo.userList[0].userName %><br>
     <p>keys 1st user: </p><%= Object.keys(userInfo.userList[0]) %>
-
-    <% /* %>
+    <p>getOwnProps</p> <%= Object.getOwnPropertyNames(userInfo.userList[0]) %>
+    <p>JSON</p><%= Object.keys(userInfo.userList[0].toJSON()) %>
+    <% */ %>
 
     <% if (userInfo.userList.length != 0) { %>
-        <table>
-            <tr>
-                <% for(let key in userInfo.userList[0]) { %>
-                    <th><%= key %></th>
+        <table class="userInfoTable">
+            <tr class="userInfoRow">
+                <% for(let key of Object.keys(userInfo.userList[0].toJSON())) { %>
+                    <th class="userInfoVal"><%= key %></th>
                 <% } %>
             </tr>
             <% for(let i=0; i < userInfo.userList.length; i++) { %>
-                <tr>
-                    <% for(let key in userInfo.userList[i]) { %>
-                        <td><%=userInfo[key]%></td>
+                <tr class="userInfoRow">
+                    <% for(let key of Object.keys(userInfo.userList[i].toJSON())) { %>
+                        <td class="userInfoVal"><%=userInfo.userList[i][key]%></td>
                     <% } %>
                 </tr>
             <% } %>
         </table>
+        <h4>Found: <%= userInfo.userList.length %> users</h4>
+    <% } else { %>
+        <h4>No users</h4>
     <% } %>
 
-    <% */ %>
+
+
+
 
 </html>
