@@ -50,21 +50,18 @@
         Password: <input type="password" name="password" id="passwordInput" autocomplete="off"><br>
         <button type="button" id="loginInput">Submit</button>-->
 
+        <p><strong>Log in below to see your account info</strong></p>
         <form action="/loginPost" method="POST">
             Username: <input type="text" name="userName" autocomplete="off"><br>
             Password: <input type="password" name="password" autocomplete="off"><br>
             <input type="submit">
         </form>
 
-        <a href="/createUser">Register</a>
+        <p><strong>Or create an account <a href="/createUser">here</a></strong></p>
 
         <% if (errorMssg.message !== '') {  %>
             <p style="padding: 3px 3px 3px 8px;"><span id="errorMssgDisp"><%= errorMssg.message %></span></p>
         <% }; %>
-
-        <div>
-            <p id="loginMssg">hello world ejs</p>
-        </div>
 
     </body>
 

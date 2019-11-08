@@ -1,6 +1,4 @@
-var userName = "amosancell";
-var password = "hello";
-var userInfo = {}
+
 
 
 var express = require('express');
@@ -14,7 +12,7 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-require("./routes/routes.js")(app, cors, userName, password, userInfo);
+require("./routes/routes.js")(app, cors);
 
 connectString = "mongodb+srv://amosAncell:goDataBase@cluster0-pckij.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(connectString);

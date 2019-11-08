@@ -1,10 +1,10 @@
-module.exports = function(app, cors, userName, password, userInfo) {
+module.exports = function(app, cors) {
 
     var currentUser;
 
     //import the User object
-    var User = require('../Models/user.js').userSchema;
-    var Apple = require('../Models/user.js').appleSchema;
+    var User = require('../Models/user.js');
+    var Apple = require('../Models/apple.js').model;
 
     app.get('/home', cors(), function(req, res) {
         if(!currentUser) {
@@ -13,6 +13,10 @@ module.exports = function(app, cors, userName, password, userInfo) {
         else {
             res.render('home.ejs', {user: currentUser});
         }
+    });
+
+    app.get('/', cors(), function(req, res) {
+        res.redirect('/login');
     });
 
     app.get('/login', cors(), function(req, res) {
@@ -40,10 +44,11 @@ module.exports = function(app, cors, userName, password, userInfo) {
     });
 
     app.post('/makeUser', cors(), function(req, res) {
-        console.log('makeUser',{userName: req.body.userName, password: req.body.password});
+        console.log(" starting /makeUser");
+        //console.log('makeUser',{userName: req.body.userName, password: req.body.password});
         User.findOne({userName: req.body.userName, password: req.body.password}, function(error, user) {
             if(error) {
-                console.log("error in /makeUser");
+                //console.log("error in /makeUser");
                 res.redirect('/createUser?success=true');
             }
             else {
@@ -51,12 +56,12 @@ module.exports = function(app, cors, userName, password, userInfo) {
                 if(!user) {
                     var u = new User({userName: req.body.userName, password: req.body.password});
                     u.save(function(error,user) {
-                        console.log("made user",user);
+                        //console.log("made user",user);
                         res.redirect('/createUser?success=true');
                     });
                 }
                 else {
-                    console.log("user already exists");
+                    //console.log("user already exists");
                     res.redirect('/createUser?success=false');
                 }
             }
@@ -96,6 +101,7 @@ module.exports = function(app, cors, userName, password, userInfo) {
                 });
             }
         });*/
+        console.log("start /loginPost");
         User.findOne({userName: req.body.userName, password: req.body.password}, function(error, user) {
             /*if(error) {
                 console.log("login failed, user not found");
@@ -107,12 +113,12 @@ module.exports = function(app, cors, userName, password, userInfo) {
                 res.render('home.ejs', {user:user});
             }*/
             if(user) {
-                console.log("found one", user);
+                //console.log("found one", user);
                 currentUser = user;
                 res.render("home.ejs", {user: user});
             }
             else {
-                console.log("login failed, user not found");
+                //console.log("login failed, user not found");
                 res.redirect("/login?error=true");
             }
         });
@@ -120,14 +126,15 @@ module.exports = function(app, cors, userName, password, userInfo) {
     });
 
     app.post('/infoPost', cors(), function(req, res) {
+        console.log("start /infoPost");
         User.findOne({userName: currentUser.userName, password: currentUser.password}, function(error, user) {
             if(error) {
-                console.log("error has occurres in /infoPost");
+                //console.log("error has occurres in /infoPost");
                 res.redirect('/home');
             }
             else {
                 if(!user) {
-                    console.log('user not found in /infoPost');
+                    //console.log('user not found in /infoPost');
                     res.redirect('/home');
                 }
                 else {
@@ -146,7 +153,8 @@ module.exports = function(app, cors, userName, password, userInfo) {
     });
 
     app.get('/changePassLink', cors(), function(req, res) {
-        console.log(req.query, req.query.success, typeof req.query.success);
+        console.log("start /changePassLink");
+        //console.log(req.query, req.query.success, typeof req.query.success);
         if("success" in req.query) {
             if(req.query.success == 'true') {
                 var mssg = {success: true, message: "Success! Your password has been changed!"};
@@ -177,19 +185,20 @@ module.exports = function(app, cors, userName, password, userInfo) {
             //res.send("Success! Your password has been changed");
             res.redirect("/changePassLink?success=true")
         }*/
-        console.log("currentUser",{username: currentUser.userName, password: req.body.oldPass});
+        console.log("start /changePass");
+        //console.log("currentUser",{username: currentUser.userName, password: req.body.oldPass});
         User.findOne({userName: currentUser.userName, password: req.body.oldPass}, function(error,user) {
             if(error) {
-                console.log("an error occurred in /changePass");
+                //console.log("an error occurred in /changePass");
                 res.redirect("/changePassLink?success=false");
             }
             else {
                 if(!user) {
-                    console.log("user not found");
+                    //console.log("user not found");
                     res.redirect("/changePassLink?success=false");
                 }
                 else {
-                    console.log("changePass user", user);
+                    //console.log("changePass user", user);
                     if(req.body.newPass == req.body.confPass) {
                         user.password = req.body.newPass;
                         currentUser = user;
@@ -206,8 +215,12 @@ module.exports = function(app, cors, userName, password, userInfo) {
     });
 
     app.get('/userInfo', cors(), function(req, res) {
-        res.render('userInfo.ejs', {userInfo: {userList: []}});
-        //res.render('userInfo.ejs', {userInfo: {}});
+        //res.render('userInfo.ejs', {userInfo: {userList: []}});
+        // console.log("User.schema.paths");
+        // console.log(Object.keys(User.schema.paths));
+        // console.log("");
+        console.log("start /userInfo");
+        res.render('userInfo.ejs', {userInfo: {schema: User}});
     });
     
     app.post('/getUserInfo', cors(), function(req, res) {
@@ -263,9 +276,42 @@ module.exports = function(app, cors, userName, password, userInfo) {
             }
             else {
                 console.log('found results', users);
-                res.render('userInfo.ejs', {userInfo: {userList: users}});
+                res.render('userInfo.ejs', {userInfo: {userList: users, schema: User}});
             }
         });
         console.log("end /getUserInfo");
+    });
+
+    app.get("/appleGame", cors(), function(req, res) {
+        res.render("appleGame.ejs", {user: currentUser});
+    });
+
+    app.post("/gotApple", cors(), function(req, res) {
+        console.log("start /gotApple");
+        console.log(req.body.apple.type, req.body.apple.color);
+        User.find({userName: currentUser.userName, userName: currentUser.password}, function(error, user) {
+            if(error) {
+                console.log("error occurred while trying to store apple");
+            }
+            else {
+                if(!user) {
+                    console.log("no user found");
+                }
+                else {
+                    var a = new Apple({type: req.body.apple.type, color: req.body.apple.color});
+                    if(!currentUser.apples) {
+                        currentUser.apples = [a];
+                    }
+                    else {
+                        currentUser.apples.push(a);
+                    }
+                    currentUser.save(function(error,user) {
+                        if(error) {
+                            return handleError(error);
+                        }
+                    });
+                }
+            }
+        })
     });
 }

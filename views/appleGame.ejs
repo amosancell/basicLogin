@@ -1,12 +1,78 @@
 <html>
     <head>
         <link type="text/css" rel="stylesheet" href="stylesheet.css">
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
 
     <body>
 
-        <h1>Pick Apples!</h1>
+        <div class="topnav">
+            <a href="home">Home</a>
+            <a href="changePassLink">Change Password</a>
+            <a href="createUser">Create User</a>
+            <a href="userInfo">User Info</a>
+            <a href="appleGame">Apple Game</a>
+        </div>
+
+        <h1>Welcome <%= user.userName %>! Want to pick some apples?</h1>
+
+        <p>Click on the apple to collect it!</p>
+        <script>
+
+            var appleChars = [];
+            var apple;
+
+            function setup() {
+                createCanvas(400,400);
+                appleChars.push(["mcintosh",color(201, 70, 22)]);
+                appleChars.push(["red delicious", color(168, 0, 28)]);
+                start = Math.floor(random()*appleChars.length);
+                apple = new Apple(appleChars[start][0],appleChars[start][1],random(30,width-30),random(30,height-30),random(10,30));
+            }
+
+            function draw() {
+                background(100);
+                apple.display();
+                if(mouseIsPressed && apple.isClicked(mouseX,mouseY)) {
+                    apple = randApple();
+                    $.ajax({
+                        url: "http://localhost:3000/gotApple",
+                        type: "POST",
+                        data: {apple: {type: apple.type, color: apple.color.toString()}}
+                    });
+                }
+            }
+
+            function randApple() {
+                start = Math.floor(random()*appleChars.length);
+                apple = new Apple(appleChars[start][0],appleChars[start][1],random(60,width-60),random(60,height-60),random(10,60));
+                return apple;
+            }
+
+            class Apple {
+                constructor(type, color, x, y, r) {
+                    this.type = type;
+                    this.color = color;
+                    this.x = x;
+                    this.y = y;
+                    this.r = r;
+                    this.stemLen = 0.5 * this.r;
+                }
+
+                display() {
+                    fill(this.color);
+                    ellipse(this.x, this.y, this.r*2, this.r*2);
+                    line(this.x,this.y-this.r,this.x,this.y-this.r-this.stemLen);
+                    noFill();
+                }
+
+                isClicked(x, y) {
+                    return dist(x,y,this.x,this.y) <= this.r;
+                }
+            }
+
+        </script>
 
     </body>
 </html>

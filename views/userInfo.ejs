@@ -9,11 +9,21 @@
         <div class="topnav">
             <a href="home">Home</a>
             <a href="changePassLink">Change Password</a>
-            <a href="createUser">Create Usre</a>
+            <a href="createUser">Create User</a>
             <a href="userInfo">User Info</a>
+            <a href="appleGame">Apple Game</a>
         </div>
 
         <form method="POST" action="/getUserInfo">
+
+            <% /* %>
+            Select Columns to view:<br>
+            <% for(let key of Object.keys(userInfo.schema.schema.paths)) { %>
+                <input type="checkbox" name=<% key %> value=<% key %>><%= key %><br>
+            <% } %>
+            <% */ %>
+            <br>
+
             Select usernames 
                 <select name="uComp">
                     <option value="=">Equal to</option>
@@ -61,6 +71,34 @@
     <p>JSON</p><%= Object.keys(userInfo.userList[0].toJSON()) %>
     <% */ %>
 
+    <% if(!userInfo.userList) { %>
+        <h4>Search the database for users with specific info</h4>
+    <% } else { %>
+        <% if (userInfo.userList.length != 0) { %>
+            <table class="userInfoTable">
+                <tr class="userInfoRow">
+                    <% for(let key of Object.keys(userInfo.userList[0].toJSON())) { %>
+                        <th class="userInfoVal"><%= key %></th>
+                    <% } %>
+                </tr>
+                <% for(let i=0; i < userInfo.userList.length; i++) { %>
+                    <tr class="userInfoRow">
+                        <% for(let key of Object.keys(userInfo.userList[i].toJSON())) { %>
+                            <td class="userInfoVal"><%=userInfo.userList[i][key]%></td>
+                        <% } %>
+                    </tr>
+                <% } %>
+            </table>
+            <h4>Found: <%= userInfo.userList.length %> users</h4>
+        <% } else { %>
+            <h4>No users found matching query parameters</h4>
+        <% } %> 
+    <% } %>
+
+
+
+
+    <% /* %>
     <% if (userInfo.userList.length != 0) { %>
         <table class="userInfoTable">
             <tr class="userInfoRow">
@@ -80,6 +118,7 @@
     <% } else { %>
         <h4>No users</h4>
     <% } %>
+    <% */ %>
 
 
 
